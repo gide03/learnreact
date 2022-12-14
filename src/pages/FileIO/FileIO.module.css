@@ -1,0 +1,115 @@
+.MainContainer {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.FileIOContainer {
+  width: 300px;
+  height: 80%;
+  background-color: azure;
+  border: 3px dashed black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 
+    Cards wrapper
+*/
+.fileCardWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  width: 70%;
+  height: 80%;
+  max-width: 70%;
+  max-width: 80%;
+  border: 2px solid black;
+  align-self: center;
+}
+.fileCardWrapper ul {
+  margin-top: 5px;
+  width: 98%;
+  list-style-type: none;
+  padding: 0;
+  overflow-x: hidden;
+}
+.cardWrapperPanel {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+
+  width: 100%;
+  min-height: 70px;
+  background-color: rgb(208, 208, 208);
+  border: 1px solid black;
+  margin-top: -2px;
+  margin-left: -1px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.cardWrapperPanel button {
+  color: rgb(239, 230, 230);
+  background-color: red;
+  width: 4rem;
+  height: 2rem;
+}
+.cardWrapperPanel input {
+  font-size: 14px;
+}
+
+/* 
+    File Card component
+*/
+
+.fileCard {
+  width: 98%;
+  padding: 10px;
+  position: relative;
+  display: flex;
+  background-color: whitesmoke;
+  margin-bottom: 7px;
+}
+.fileCard table {
+  width: 80%;
+}
+.fileCard table th {
+  text-align: left;
+}
+.fileCard textarea {
+  width: 100%;
+  resize: none;
+}
+.deleteButton {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+.deleteIcon {
+  width: 25px;
+  height: 25px;
+  /* background-color: black; */
+}
+.deleteIcon span {
+  background-color: black;
+  width: 100%;
+  height: 5px;
+}
+.btSubmit {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  width: 100px;
+  height: 50px;
+  /* padding: 5px; */
+}

@@ -1,2 +1,0 @@
-# learnreact
-just for fun

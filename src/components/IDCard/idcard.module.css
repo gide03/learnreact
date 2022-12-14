@@ -1,0 +1,82 @@
+.main {
+  position: relative;
+  width: 80%;
+  max-width: 800px;
+  padding: 20px;
+
+  background-color: #fff;
+
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  justify-content: center;
+  align-items: center;
+
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box; /* Firefox, other Gecko */
+  box-sizing: border-box; /* Opera/IE 8+ */
+}
+.readMoreHeader {
+  position: absolute;
+  width: 100%;
+  top: -20px;
+  display: flex;
+  justify-content: center;
+}
+
+.btn {
+  display: inline-block;
+  color: whitesmoke;
+  background-color: rgba(34, 34, 34);
+  text-decoration: none;
+  padding: 8px;
+  border: 1px solid black;
+  border-radius: 5px;
+
+  transition: all 0.3s;
+}
+.btn:hover {
+  color: rgba(34, 34, 34);
+  background-color: whitesmoke;
+}
+
+.authorContainer {
+  display: flex;
+  align-self: start;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.authorImg {
+  width: 150px;
+  height: 150px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: 1% 4%;
+  filter: brightness(90%);
+}
+.authorBio {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.authorContainer ul {
+  list-style: none;
+  padding: 0;
+  width: 130px;
+  display: flex;
+  justify-content: space-between;
+}
+.authorContainer ul img {
+  width: 50px;
+}
+
+.authorContainer ul img:hover {
+  cursor: pointer;
+}
