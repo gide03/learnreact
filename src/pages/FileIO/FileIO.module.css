@@ -113,3 +113,27 @@
   height: 50px;
   /* padding: 5px; */
 }
+
+/* 
+  PROGRESS BAR
+*/
+.progressBar {
+  position: absolute;
+  border-radius: 5px;
+
+  padding: 100px;
+  background-color: brown;
+  top: 50%;
+  right: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progressBar progress {
+  height: 20px;
+}
+
+.hide {
+  display: none;
+}
