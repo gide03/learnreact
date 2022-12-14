@@ -52,7 +52,7 @@
   background-color: rgb(208, 208, 208);
   border: 1px solid black;
   margin-top: -2px;
-  margin-left: -1px;
+  margin-left: 0px;
 
   display: flex;
   align-items: center;

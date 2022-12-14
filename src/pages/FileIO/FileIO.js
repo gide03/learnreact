@@ -5,6 +5,7 @@ import { useState, useRef } from "react";
 // import zipico from "./zip_ico.svg";
 
 const FileCard = (props) => {
+  // console.log(props);
   return (
     <div className={`${styles.fileCard}`} id={`file-form-${props.idx}`}>
       <div style={{ width: "calc(100% - 40px)" }}>
@@ -38,7 +39,7 @@ const FileCard = (props) => {
       {/* <button onClick={whoAmI}>Who am I</button> */}
       <button
         className={`${styles.deleteButton}`}
-        onClick={() => props.deleteElement(props.filename)}
+        onClick={() => props.deleteElement(props.filename, props.idx)}
       >
         <div className={`${styles.deleteIcon}`}>
           <span></span>
@@ -50,16 +51,14 @@ const FileCard = (props) => {
 };
 
 const FileIO = () => {
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState({ keys: [], list: [] }); // ["keys":["file_<random>", ...],"files":[File, ...]]
   const inputRef = useRef();
 
   document.title = "File IO";
 
   const handleDrop = (event) => {
     event.preventDefault();
-    const newList = [...files];
-    newList.push(...event.dataTransfer.files);
-    setFiles(newList);
+    appendFile(event.dataTransfer.files);
   };
 
   const handleDragOver = (event) => {
@@ -67,22 +66,27 @@ const FileIO = () => {
   };
 
   const appendFile = (fileList) => {
-    console.log("Files");
+    let _file_keys = [...files.keys];
+    let _file_list = [...files.list];
     console.log(files);
-    console.log("File list:");
-    console.log(fileList);
-    const newList = [...files];
-    console.log("New list before:");
-    console.log(newList);
-    newList.push(...fileList);
-    console.log("New list after:");
-    console.log(newList);
-    setFiles(newList);
+
+    for (let i = 0; i < Array.from(fileList).length; i++) {
+      while (true) {
+        const _key = `file_${Math.floor(Math.random() * 999)}`; // Make sure key is unique and update files queue
+        if (!files.keys.includes(_key)) {
+          _file_keys.push(_key);
+          _file_list.push(fileList[i]);
+          break;
+        }
+      }
+      setFiles({ keys: _file_keys, list: _file_list });
+    }
   };
 
-  const handlerDeleteElement = (e) => {
-    const newList = [...files].filter((file) => file.name !== e);
-    setFiles(newList);
+  const handlerDeleteElement = (fname, fidx) => {
+    const _key = [...files.keys].filter((k, idx) => k !== fidx);
+    const _list = [...files.list].filter((f) => f.name !== fname);
+    setFiles({ keys: _key, list: _list });
   };
 
   const uploadForm = async (m_form) => {
@@ -95,14 +99,12 @@ const FileIO = () => {
   };
 
   const handlerUploadData = () => {
-    console.log("uploadData");
     let m_form = new FormData();
     m_form.append("coba 1", "hello world coba 1");
-    m_form.append("coba 2", "hello world coba 2");
+    m_form.append("file", files);
     uploadForm(m_form);
   };
 
-  //   if (files.length > 0)
   return (
     <>
       <div className={`${styles.MainContainer}`}>
@@ -124,7 +126,6 @@ const FileIO = () => {
             type="file"
             accept="application/zip"
             multiple
-            // onChange={(event) => setFiles(event.target.files)}
             onChange={(event) => appendFile(event.target.files)}
             hidden
             ref={inputRef}
@@ -141,12 +142,12 @@ const FileIO = () => {
             <button className={`${styles.closeButton}`}>Clear</button>
           </div>
           <ul>
-            {Array.from(files).map((file, idx) => (
-              <li key={idx}>
+            {files.keys.map((_key, idx) => (
+              <li key={_key}>
                 <FileCard
-                  filename={file.name}
+                  filename={files.list[idx].name}
                   deleteElement={handlerDeleteElement}
-                  idx={idx}
+                  idx={_key}
                 ></FileCard>
               </li>
             ))}
