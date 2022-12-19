@@ -3,7 +3,8 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 // import App from './App';
 // import reportWebVitals from './reportWebVitals';
-import FileIO from "./pages/FileIO/FileIO";
+// import FileIO from "./pages/FileIO/FileIO";
+import FRN from "./pages/FRN/FRN";
 // import Navbar from "./components/Navbar/Navbar";
 // import Blog from "./pages/Blog/Blog";
 // import Footer from "./components/Footer/Footer";
@@ -11,7 +12,7 @@ import FileIO from "./pages/FileIO/FileIO";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <FileIO></FileIO>
+    {/* <FileIO></FileIO> */}
     {/* <Navbar></Navbar> */}
     {/* <Blog></Blog> */}
     {/* <div
@@ -28,6 +29,7 @@ root.render(
     <div style={{ height: "1000px" }}></div>
     <IDCard></IDCard> */}
     {/* <Footer></Footer> */}
+    <FRN></FRN>
   </React.StrictMode>
 );
 

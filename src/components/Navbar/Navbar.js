@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styles from "./navbar.module.css";
 import mailico from "./mail.svg";
+import logo from "./logo.svg";
 
 const Navbar = (props) => {
   const [flagTheme, setFlagTheme] = useState(true);
@@ -27,7 +28,12 @@ const Navbar = (props) => {
         className={`${styles.main} ${flagTheme ? styles.navbarLightTheme : ""}`}
       >
         <div className={`${styles.navbarContentWrapper}`}>
-          <div>Logo dan Home</div>
+          <div class={`${styles.homeLogo}`}>
+            {/* <div> */}
+            <img src={logo} width="40px" height="40px" alt="logo"></img>
+            {/* </div> */}
+            <span>gnugroho</span>
+          </div>
 
           <ul>
             <li>

@@ -66,14 +66,8 @@
   font-weight: 200;
 }
 .readmoreBt {
-  width: fit-content;
-
-  /* height: 2rem;
-  display: flex; */
-  /* align-items: center; */
-  padding: 8px;
   margin: auto;
-
+  padding: 8px;
   text-decoration: none;
   color: white;
   background-color: rgb(31, 100, 204);
