@@ -3,11 +3,11 @@ import EditorContext from "./EditorContext";
 import Markdown from "react-remarkable";
 import mStyle from "./frn.module.css";
 import ImageThumbnail from "./Thumbnail";
-import FormContext from "./FormContext";
+// import FormContext from "./FormContext";
 
 const MarkInput = () => {
   const { markdownText, setMarkdownText } = useContext(EditorContext);
-  const { basicInfo, setBasicInfo } = useContext(FormContext);
+  // const { basicInfo, setBasicInfo } = useContext(FormContext);
   const onInputChange = (e) => {
     // console.log("hi");
     const newValue = e.currentTarget.value;
@@ -38,7 +38,7 @@ const MarkInput = () => {
       className={`${mStyle.container} ${mStyle.editor}`}
       style={{ marginBottom: "5px" }}
     >
-      <div>Image Description</div>
+      <div className={`${mStyle.formHeader}`}>Image Description</div>
       <textarea
         onChange={onInputChange}
         defaultValue={textAreaDefaultValue}
@@ -62,6 +62,15 @@ const MarkResult = () => {
 };
 
 const BasicInfo = (props) => {
+  const [projectName, setProjectName] = useState('');
+  // const [imageTitle, setImageTitle] = useState('');
+  // const [imageSubTitle, setImageSubTitle] = useState('');
+
+  const onTypeProjectName = (e) => {
+    setProjectName(e.currentTarget.value)
+    console.log(projectName)
+  }
+
   return (
     <div className={`${mStyle.basicInformationForm}`}>
       <div className={mStyle.formHeader}>Basic information</div>
@@ -70,7 +79,7 @@ const BasicInfo = (props) => {
           <tr>
             <th>Project Name</th>
             <td>
-              <input type="text" id="project-name" name="project-name"></input>
+              <input type="text" id="project-name" name="project-name" onKeyUp={onTypeProjectName}></input>
             </td>
           </tr>
           <tr>
@@ -80,9 +89,9 @@ const BasicInfo = (props) => {
             </td>
           </tr>
           <tr>
-            <th>Image Title</th>
+            <th>Release date</th>
             <td>
-              <input type="date" id="release-data" name="release-date"></input>
+              <input type="date" id="release-date" name="release-date"></input>
             </td>
           </tr>
           <tr>
@@ -187,9 +196,21 @@ const FRNForm = (props) => {
   1.
   2.
     `);
+  const [imageTitle, setImageTitle] = useState('');
+  const [releaseDate, setReleaseDate] = useState('');
+  const [NLRSignature, setNLRSignature] = useState('');
+  const [NLR2Signature, setNLR2Signature] = useState('');
+  const [LRSignature, setLRSignature] = useState('');
+  const [selectedFiles, setSelectedFiles] = useState('');
+
   const contextValue = {
-    markdownText,
-    setMarkdownText,
+    markdownText, setMarkdownText,
+    releaseDate, setImageTitle,
+    imageTitle, setReleaseDate,
+    NLRSignature, setNLRSignature,
+    NLR2Signature, setNLR2Signature,
+    LRSignature,setLRSignature,
+    selectedFiles,setSelectedFiles
   };
 
   const dummyData = {
@@ -199,7 +220,7 @@ const FRNForm = (props) => {
   };
 
   return (
-    <>
+    <FormContext.Provider value={contextValue}>
       <div className={`${mStyle.mainForm}`}>
         <BasicInfo></BasicInfo>
         <AttachmentForm></AttachmentForm>
@@ -221,8 +242,8 @@ const FRNForm = (props) => {
           <h2>Rendered Image Detail</h2>
           <Markdown source={`${markdownText}`}></Markdown>
         </div>
-      </div>
-    </>
+        </div>
+    </FormContext.Provider>
   );
 };
 
