@@ -1,10 +1,10 @@
 import mStyle from "./frn.module.css";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import Markdown from "react-remarkable";
-import EditorContext from "./EditorContext";
-// import FileIO from "../FileIO/FileIO";
 import FRNForm from "./FRNForm";
 import ImageThumbnail from "./Thumbnail";
+
+import FRN_SideBar from "./Sidebar";
 
 const dummyDataThumnail = [
   {
@@ -83,41 +83,84 @@ const ContentSection = (props) => {
   );
 };
 
-const FRNSideBar = () => {
-  return (
-    <div>
-      <h2>Sidebar</h2>
-      <ul>
-        <li>EM620</li>
-        <li>EM620 International 1</li>
-        <li>EM620 International 2</li>
-        <li>EM623 Ruby</li>
-      </ul>
-    </div>
-  );
-};
+// const FRNo = () => {
+//   document.title = "Firmware Release Note";
+//   const [selectedImage, setSelectedImage] = useState(null);
+//   const [flagAddImage, setFlagAddImage] = useState(false);
+
+//   const handlerContentSelection = (data) => {
+//     // console.log("handler content selected");
+//     // console.log(data);
+//     setSelectedImage(data);
+//   };
+//   const handlerCloseContent = () => {
+//     setSelectedImage(null);
+//   };
+
+//   return (
+//     <div className={mStyle.pageContent}>
+//       {!flagAddImage && (
+//         <div className={`${mStyle.sideBar}`}>
+//           <FRNSideBar></FRNSideBar>
+//         </div>
+//       )}
+//       {!selectedImage && !flagAddImage && (
+//         <>
+//           <div className={`${mStyle.thumbnailContainer}`}>
+//             <h1>Image Release - EM620 VOC (International 2)</h1>
+//             <div className={`${mStyle.thumbnail}`}>
+//               {dummyDataThumnail
+//                 .map((data, idx) => (
+//                   <ImageThumbnail
+//                     key={`${data}_${idx}`}
+//                     data={data}
+//                     contentSelect={handlerContentSelection}
+//                   ></ImageThumbnail>
+//                 ))
+//                 .reverse()}
+//             </div>
+//           </div>
+//         </>
+//       )}
+//       {selectedImage && !flagAddImage && (
+//         <ContentSection
+//           data={selectedImage}
+//           closeContent={() => handlerCloseContent}
+//         ></ContentSection>
+//       )}
+//       {flagAddImage && <FRNForm key={"frnForm"}></FRNForm>}
+
+//       <div className={`${mStyle.toolBar}`}>
+//         <button onClick={() => setFlagAddImage(!flagAddImage)}>
+//           {flagAddImage ? "Cancel" : "Add Image"}
+//         </button>
+//         {flagAddImage && (
+//           <>
+//             <button>Attach File</button>
+//           </>
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
 
 const FRN = () => {
   document.title = "Firmware Release Note";
   const [selectedImage, setSelectedImage] = useState(null);
   const [flagAddImage, setFlagAddImage] = useState(false);
 
+  // PUT HANDLER HERE
   const handlerContentSelection = (data) => {
-    // console.log("handler content selected");
-    // console.log(data);
     setSelectedImage(data);
   };
   const handlerCloseContent = () => {
     setSelectedImage(null);
   };
 
+  // COMPONENT RENDER
   return (
     <div className={mStyle.pageContent}>
-      {!flagAddImage && (
-        <div className={`${mStyle.sideBar}`}>
-          <FRNSideBar></FRNSideBar>
-        </div>
-      )}
+      {!flagAddImage && <FRN_SideBar></FRN_SideBar>}
       {!selectedImage && !flagAddImage && (
         <>
           <div className={`${mStyle.thumbnailContainer}`}>
@@ -142,7 +185,7 @@ const FRN = () => {
           closeContent={() => handlerCloseContent}
         ></ContentSection>
       )}
-      {flagAddImage && <FRNForm></FRNForm>}
+      {flagAddImage && <FRNForm key={"frnForm"}></FRNForm>}
 
       <div className={`${mStyle.toolBar}`}>
         <button onClick={() => setFlagAddImage(!flagAddImage)}>
@@ -157,98 +200,4 @@ const FRN = () => {
     </div>
   );
 };
-
-const MarkInput = () => {
-  const { markdownText, setMarkdownText } = useContext(EditorContext);
-  const onInputChange = (e) => {
-    // console.log("hi");
-    const newValue = e.currentTarget.value;
-    setMarkdownText(newValue);
-    console.log(markdownText);
-  };
-
-  const textAreaDefaultValue = `
-# Image Description
-...
-
-# Signatures
-|Type|Signature|
-|----|---------|
-|NLR |...|
-|NLR2|...|
-|LR  |...|
-
-# Release Note
-...
-
-# Changes Log
-1.
-2.`;
-
-  return (
-    <div
-      className={`${mStyle.container} ${mStyle.editor}`}
-      style={{ marginBottom: "5px" }}
-    >
-      <div>Markdown Input</div>
-      <textarea
-        onChange={onInputChange}
-        value={textAreaDefaultValue}
-      ></textarea>
-    </div>
-  );
-};
-
-const MarkResult = () => {
-  // const { markDowntext } = useContext(EditorContext);
-  const { markdownText, setMarkdownText } = useContext(EditorContext);
-
-  return (
-    <div
-      className={`${mStyle.container} ${mStyle.result}`}
-      style={{ marginBottom: "5px" }}
-    >
-      <Markdown source={`${markdownText}`}></Markdown>
-    </div>
-  );
-};
-
-const FRNo = () => {
-  const [markdownText, setMarkdownText] = useState(`
-# Image Description
-...
-
-# Signatures
-|Type|Signature|
-|----|---------|
-|NLR |...|
-|NLR2|...|
-|LR  |...|
-
-# Release Note
-...
-
-# Changes Log
-1.
-2.
-  `);
-  const contextValue = {
-    markdownText,
-    setMarkdownText,
-  };
-
-  return (
-    <>
-      {/** Give access to all component beneath the tag */}
-      <h1>Markdown Editor</h1>
-      <div className={mStyle.main}>
-        <EditorContext.Provider value={contextValue}>
-          <MarkInput></MarkInput>
-          <MarkResult></MarkResult>
-        </EditorContext.Provider>
-      </div>
-    </>
-  );
-};
-
 export default FRN;

@@ -7,32 +7,29 @@ const ImageThumbnail = (props) => {
       className={mStyle.imageCard}
       onClick={() => props.contentSelect(props.data)}
     >
-      {/* <a href="#"> */}
       <div className={mStyle.imageCardContent}>
         <div>
           <h1>{data.title}</h1>
           <p className={`${mStyle.subtitle}`}>{data.subtitle}</p>
-
           <table style={{ marginLeft: "20px" }}>
             <tbody>
               <tr>
                 <th>NLR</th>
-                <td>lkasjdlkajskldjaskldjalksjdklasdklasjdlkasjdlkajslkdsja</td>
+                <td>{data.NLR}</td>
               </tr>
               <tr>
                 <th>NLR2</th>
-                <td>lkasjdlkajskldjaskldjalksjdklasdklasjdlkasjdlkajslkdsja</td>
+                <td>{data.NLR2}</td>
               </tr>
               <tr>
                 <th>LR</th>
-                <td>lkasjdlkajskldjaskldjalksjdklasdklasjdlkasjdlkajslkdsja</td>
+                <td>{data.LR}</td>
               </tr>
             </tbody>
           </table>
         </div>
         <p className={`${mStyle.releaseDate}`}>{data.releaseDate}</p>
       </div>
-      {/* </a> */}
     </div>
   );
 };
