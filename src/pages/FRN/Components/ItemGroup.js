@@ -1,18 +1,18 @@
 import styled, { ThemeProvider } from "styled-components";
 import SidebarContext from "../Context/SidebarContext";
-import { React, useContext } from "react";
+import { React, useContext, useState } from "react";
 import ProjectItem from "./ProjectItem";
 
 /**
  * Expected to placed inside side bar
  */
-const Item = styled.div`
-  display: flex;
-  flex-direction: ${(props) => props.direction};
+const Container = styled.div`
+  /* display: flex; */
+  /* flex-direction: ${(props) => props.direction}; */
   width: 100%;
   justify-content: space-around;
 `;
-Item.defaultProps = {
+Container.defaultProps = {
   direction: "column",
 };
 
@@ -30,12 +30,14 @@ const ItemGroup = (props) => {
 
   return (
     <ThemeProvider theme={mTheme}>
-      {projectlist.map((project, index) => (
-        <ProjectItem
-          key={`project-ProjectItem-${index}`}
-          projectname={project}
-        ></ProjectItem>
-      ))}
+      <Container>
+        {projectlist.map((project, index) => (
+          <ProjectItem
+            key={`project-ProjectItem-${index}`}
+            projectname={project}
+          ></ProjectItem>
+        ))}
+      </Container>
     </ThemeProvider>
   );
 };

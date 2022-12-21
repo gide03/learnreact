@@ -5,6 +5,8 @@ import FRNForm from "./FRNForm";
 import ImageThumbnail from "./Thumbnail";
 
 import FRN_SideBar from "./Sidebar";
+import ProjectContent from "./ProjectContent";
+import SidebarContext from "./Context/SidebarContext";
 
 const dummyDataThumnail = [
   {
@@ -148,6 +150,12 @@ const FRN = () => {
   document.title = "Firmware Release Note";
   const [selectedImage, setSelectedImage] = useState(null);
   const [flagAddImage, setFlagAddImage] = useState(false);
+  const [projectlist, setProjectList] = useState([
+    "EM620",
+    "EM620 VOC International 1",
+    "EM620 VOC International 2",
+  ]);
+  const [activeProject, setActiveProject] = useState(projectlist[0]);
 
   // PUT HANDLER HERE
   const handlerContentSelection = (data) => {
@@ -157,47 +165,50 @@ const FRN = () => {
     setSelectedImage(null);
   };
 
+  const sharedContext = {
+    projectlist,
+    setProjectList,
+    activeProject,
+    setActiveProject,
+  };
+
   // COMPONENT RENDER
   return (
-    <div className={mStyle.pageContent}>
-      {!flagAddImage && <FRN_SideBar></FRN_SideBar>}
-      {!selectedImage && !flagAddImage && (
-        <>
-          <div className={`${mStyle.thumbnailContainer}`}>
-            <h1>Image Release - EM620 VOC (International 2)</h1>
-            <div className={`${mStyle.thumbnail}`}>
-              {dummyDataThumnail
-                .map((data, idx) => (
-                  <ImageThumbnail
-                    key={`${data}_${idx}`}
-                    data={data}
-                    contentSelect={handlerContentSelection}
-                  ></ImageThumbnail>
-                ))
-                .reverse()}
-            </div>
+    <SidebarContext.Provider value={sharedContext}>
+      <div className={mStyle.pageContent}>
+        {!flagAddImage && <FRN_SideBar></FRN_SideBar>}
+        {!flagAddImage && (
+          <div className={mStyle.internalContent}>
+            {!selectedImage ? (
+              <ProjectContent></ProjectContent>
+            ) : (
+              <ContentSection
+                data={selectedImage}
+                closeContent={() => handlerCloseContent}
+              ></ContentSection>
+            )}
           </div>
-        </>
-      )}
-      {selectedImage && !flagAddImage && (
-        <ContentSection
-          data={selectedImage}
-          closeContent={() => handlerCloseContent}
-        ></ContentSection>
-      )}
-      {flagAddImage && <FRNForm key={"frnForm"}></FRNForm>}
-
-      <div className={`${mStyle.toolBar}`}>
-        <button onClick={() => setFlagAddImage(!flagAddImage)}>
-          {flagAddImage ? "Cancel" : "Add Image"}
-        </button>
-        {flagAddImage && (
-          <>
-            <button>Attach File</button>
-          </>
         )}
+        {/* {selectedImage && !flagAddImage && (
+          <ContentSection
+            data={selectedImage}
+            closeContent={() => handlerCloseContent}
+          ></ContentSection>
+        )} */}
+        {flagAddImage && <FRNForm key={"frnForm"}></FRNForm>}
+
+        <div className={`${mStyle.toolBar}`}>
+          <button onClick={() => setFlagAddImage(!flagAddImage)}>
+            {flagAddImage ? "Cancel" : "Add Image"}
+          </button>
+          {flagAddImage && (
+            <>
+              <button>Attach File</button>
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </SidebarContext.Provider>
   );
 };
 export default FRN;

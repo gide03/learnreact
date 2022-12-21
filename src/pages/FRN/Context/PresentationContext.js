@@ -1,10 +1,8 @@
 import React from "react";
 
 const defaultContext = {
-  projectlist: [],
-  setProjectList: () => {},
-  activeProject: "",
-  setActiveProject: () => {},
+  selectedImage: "",
+  setSelectedImage: () => {},
 };
 
 export default React.createContext(defaultContext);
