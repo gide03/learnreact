@@ -121,14 +121,8 @@
 /* 
   Content
 */
-.modal {
-  width: 100%;
-  background-color: #fff;
+.fadeIn {
   animation: fadeIn 0.4s;
-  overflow: scroll;
-  overflow-x: hidden;
-
-  padding: 50px;
   -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
   -moz-box-sizing: border-box; /* Firefox, other Gecko */
   box-sizing: border-box; /* Opera/IE 8+ */
@@ -188,10 +182,10 @@ toolBar
   display: flex;
   justify-content: flex-start;
   height: 100%;
-  width: 40%;
+  width: 100%;
 
   font-size: 9px;
-  background-color: #fff;
+  background-color: rgb(163, 21, 21);
   flex-direction: column;
 
   overflow: scroll;
@@ -328,6 +322,9 @@ toolBar
   outline: none;
   font-size: 12px;
   border: none;
+}
+.slideIn {
+  animation: slideIn 0.5s;
 }
 @keyframes slideIn {
   0% {

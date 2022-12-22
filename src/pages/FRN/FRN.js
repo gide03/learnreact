@@ -1,12 +1,12 @@
 import mStyle from "./frn.module.css";
 import { useState } from "react";
 import Markdown from "react-remarkable";
-import FRNForm from "./FRNForm";
-import ImageThumbnail from "./Thumbnail";
+import FormBar from "./FormBar";
 
 import FRN_SideBar from "./Sidebar";
 import ProjectContent from "./ProjectContent";
 import SidebarContext from "./Context/SidebarContext";
+import FRNForm from "./FRNForm";
 
 const dummyDataThumnail = [
   {
@@ -195,7 +195,7 @@ const FRN = () => {
             closeContent={() => handlerCloseContent}
           ></ContentSection>
         )} */}
-        {flagAddImage && <FRNForm key={"frnForm"}></FRNForm>}
+        {flagAddImage && <FRNForm></FRNForm>}
 
         <div className={`${mStyle.toolBar}`}>
           <button onClick={() => setFlagAddImage(!flagAddImage)}>
