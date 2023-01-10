@@ -17,7 +17,7 @@ const defaultContext = {
   setLRSignature: () => {},
   selectedFiles: "",
   setSelectedFiles: () => {},
-  files: "",
+  files: { keys: [], list: [], sha256: [] },
   setFiles: () => {},
 };
 

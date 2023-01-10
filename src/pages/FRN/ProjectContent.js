@@ -2,70 +2,10 @@ import { React, useContext, useEffect, useState } from "react";
 import styled, { ThemeProvider } from "styled-components";
 import ImageThumbnail from "./Components/ImageThumbnail";
 import SidebarContext from "./Context/SidebarContext";
+import ConnSetting from "./Context/ConnSetting";
 import PresentationContext from "./Context/PresentationContext";
 import ImageContent from "./Components/ImageContent";
-
-const dummyDataThumnail = [
-  {
-    title: "ITE620_LRv08.24_NLR1v08.32_NLR2v08.32",
-    releaseDate: "2 January 2022",
-    subtitle: "Image for International 2",
-    images: {
-      imfw: "http://localhost:5000/frn/download/imfw_asldkasldkj",
-      cmfw: "http://localhost:5000/frn/download/cmfw_lkajdslkajdij",
-      ota: "http://localhost:5000/frn/download/ota_alsdlkjsdad",
-    },
-    markdown: `
-  ### Image Description
-  Image for project EM620
-  
-  ### Signatures
-  |Type|Signature|
-  |----|---------|
-  |NLR|e02048f0409116fb6a3b9c7c4bdcfe6315c2d105ee84092d9bbdd74045b43c9f|
-  |NLR2|9998190d90c59b268e62355c13c391d5ddb89f0188a267fdef72ca5624ac2513|
-  |LR|c3a5058af6669ca3ed1944d3db56ad279ae515d62428e47468fd9e7ba22de2be|
-  
-  ### Release Note
-  Please install using USB or OTA update from previous version
-  
-  ### Changes Log
-  1. Update based on CTT test: fix test object , fix key agreement algo id value
-  2. Bugfix clear status CIV on LP status
-  3. Bugfix status DNV on LP status
-        `,
-    sha256: "e02048f0409116fb6a3b9c7c4bdcfe6315c2d105ee84092d9bbdd74045b43c9f",
-  },
-  {
-    title: "ITE620_LRv08.24_NLR1v08.32_NLR2v08.32",
-    releaseDate: "3 January 2022",
-    subtitle: "Image for International 2",
-    images: {
-      imfw: "http://localhost:5000/frn/download/imfw_asldkasldkj",
-      cmfw: "http://localhost:5000/frn/download/cmfw_lkajdslkajdij",
-      ota: "http://localhost:5000/frn/download/ota_alsdlkjsdad",
-    },
-    markdown: `
-  # Image Description
-  Image for project EM620
-  
-  # Signatures
-  |Type|Signature|
-  |----|---------|
-  |NLR|e02048f0409116fb6a3b9c7c4bdcfe6315c2d105ee84092d9bbdd74045b43c9f|
-  |NLR2|9998190d90c59b268e62355c13c391d5ddb89f0188a267fdef72ca5624ac2513|
-  |LR|c3a5058af6669ca3ed1944d3db56ad279ae515d62428e47468fd9e7ba22de2be|
-  
-  # Release Note
-  Please install using USB or OTA update from previous version
-  
-  # Changes Log
-  1. Update based on CTT test: fix test object , fix key agreement algo id value
-  2. Bugfix clear status CIV on LP status
-  3. Bugfix status DNV on LP status`,
-    sha256: "9998190d90c59b268e62355c13c391d5ddb89f0188a267fdef72ca5624ac2513",
-  },
-];
+import axios from "axios";
 
 const ContentContainer = styled.div`
   width: 95%;
@@ -88,9 +28,27 @@ const ThumbnailContainer = styled.div`
   overflow-x: hidden;
 `;
 
-const ProjectContent = (props) => {
+const ProjectContent = () => {
   const { activeProject } = useContext(SidebarContext);
+  const { BackendAddress, BackendPort } = useContext(ConnSetting);
   const [selectedImage, setSelectedImage] = useState("");
+  const [imageRelease, setImageRelease] = useState([]);
+
+  useEffect(() => {
+    if (activeProject !== "") {
+      axios({
+        method: "post",
+        url: `http://${BackendAddress}:${BackendPort}/frn/getimagerelease`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: { "project-name": activeProject },
+      }).then((response) => {
+        let data = response.data.payload;
+        setImageRelease(data);
+      });
+    }
+  }, [activeProject, setImageRelease, BackendAddress, BackendPort]);
 
   const contextValue = {
     selectedImage,
@@ -107,7 +65,6 @@ const ProjectContent = (props) => {
         <ContentContainer
           tabIndex="1"
           onKeyUp={(e) => {
-            //   console.log(e);
             if (e.key === "Escape") setSelectedImage("");
           }}
         >
@@ -122,7 +79,7 @@ const ProjectContent = (props) => {
               isHeader={true}
             ></ImageThumbnail>
             <hr></hr>
-            {dummyDataThumnail
+            {imageRelease
               .map((data, idx) => (
                 <ImageThumbnail
                   key={`${data}_${idx}`}
