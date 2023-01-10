@@ -1,6 +1,9 @@
+import axios from "axios";
 import { useContext } from "react";
 import styled, { ThemeProvider } from "styled-components";
 import PresentationContext from "../Context/PresentationContext";
+import SidebarContext from "../Context/SidebarContext";
+import ConnSetting from "../Context/ConnSetting";
 
 const Thumbnail = styled.div`
   width: 100%;
@@ -39,10 +42,32 @@ const ReleaseDate = styled.span`
 
 const ImageThumbnail = (props) => {
   const { selectedImage, setSelectedImage } = useContext(PresentationContext);
+  const { activeProject } = useContext(SidebarContext);
+  const { BackendAddress, BackendPort } = useContext(ConnSetting);
+
   const data = props.data;
   const theme = {
     isHeader: props.isHeader,
     isSelected: false,
+  };
+
+  const selectImage = () => {
+    axios({
+      method: "post",
+      url: `http://${BackendAddress}:${BackendPort}/frn/getcontent`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        id: data.id,
+        "project-name": activeProject,
+        "release-title": data.title,
+        "release-date": data.releaseDate,
+      },
+    }).then((response) => {
+      let data = response.data;
+      setSelectedImage(data);
+    });
   };
 
   if (props.isHeader)
@@ -55,10 +80,10 @@ const ImageThumbnail = (props) => {
       </ThemeProvider>
     );
   else {
-    theme.isSelected = selectedImage === props.data;
+    theme.isSelected = selectedImage.id === props.data.id;
     return (
       <ThemeProvider theme={theme}>
-        <Thumbnail onClick={() => setSelectedImage(props.data)}>
+        <Thumbnail onClick={() => selectImage()}>
           <ImageName>{data.title}</ImageName>
           <ReleaseDate>{data.releaseDate}</ReleaseDate>
         </Thumbnail>

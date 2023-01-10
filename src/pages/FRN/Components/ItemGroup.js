@@ -1,14 +1,12 @@
 import styled, { ThemeProvider } from "styled-components";
 import SidebarContext from "../Context/SidebarContext";
-import { React, useContext, useState } from "react";
+import { React, useContext } from "react";
 import ProjectItem from "./ProjectItem";
 
 /**
  * Expected to placed inside side bar
  */
 const Container = styled.div`
-  /* display: flex; */
-  /* flex-direction: ${(props) => props.direction}; */
   width: 100%;
   justify-content: space-around;
 `;

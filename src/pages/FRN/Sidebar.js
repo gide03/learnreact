@@ -1,6 +1,9 @@
-import { React } from "react";
+import { React, useEffect, useContext } from "react";
 import ItemGroup from "./Components/ItemGroup";
 import styled, { ThemeProvider } from "styled-components";
+import axios from "axios";
+import SidebarContext from "./Context/SidebarContext";
+import ConnSetting from "./Context/ConnSetting";
 
 const SideBarContainer = styled.div`
   display: flex;
@@ -21,11 +24,24 @@ SideBarContainer.defaultProps = {
  * @param {px} props.top for margin top
  * @returns component
  */
-const FRN_SideBar = (props) => {
+const FRNSidebar = (props) => {
+  const { setActiveProject, setProjectList } = useContext(SidebarContext);
+  const { BackendAddress, BackendPort } = useContext(ConnSetting);
+
   const mTheme = {
     width: props.width,
     top: props.top,
   };
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `http://${BackendAddress}:${BackendPort}/frn/projectlist`,
+    }).then((response) => {
+      setProjectList(response.data.payload);
+      setActiveProject(response.data.payload[0]);
+    });
+  }, [setProjectList, setActiveProject, BackendAddress, BackendPort]);
 
   return (
     <ThemeProvider theme={mTheme}>
@@ -36,4 +52,4 @@ const FRN_SideBar = (props) => {
   );
 };
 
-export default FRN_SideBar;
+export default FRNSidebar;
