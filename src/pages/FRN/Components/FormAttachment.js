@@ -1,4 +1,4 @@
-import { useRef, useContext, useState } from "react";
+import { useRef, useContext } from "react";
 import styled from "styled-components";
 import FormContext from "../FormContext";
 import FormHeader from "./FormHeader";
@@ -125,7 +125,7 @@ const FileCard = (props) => {
         <p>sha256: {sha256}</p>
       </div>
       <div>
-        <button onClick={() => props.deleteElement(props.filename, props.idx)}>
+        <button onClick={() => props.deleteElement(filename, props.idx)}>
           X
         </button>
       </div>
@@ -135,13 +135,12 @@ const FileCard = (props) => {
 
 const FormAttachment = () => {
   const inputRef = useRef();
-  const { files, setFiles } = useContext(FormContext); //useContext({ keys: [], list: [] }); // ["keys":["file_<random>", ...],"files":[File, ...]]
-  const [SHA256, setSHA256] = useState([]);
+  const { files, setFiles } = useContext(FormContext);
 
   const appendFile = async (fileList) => {
     let _file_keys = [...files.keys];
     let _file_list = [...files.list];
-    let sha256 = [...SHA256];
+    let _file_sha256 = [...files.sha256];
 
     for (let i = 0; i < Array.from(fileList).length; i++) {
       while (true) {
@@ -149,24 +148,27 @@ const FormAttachment = () => {
         if (!files.keys.includes(_key)) {
           _file_keys.push(_key);
           _file_list.push(fileList[i]);
-          sha256.push(await getHash("SHA-256", new Blob([fileList[i]])));
+          _file_sha256.push(await getHash("SHA-256", new Blob([fileList[i]])));
           break;
         }
       }
-      setFiles({ keys: _file_keys, list: _file_list });
-      setSHA256(sha256);
+      setFiles({ keys: _file_keys, list: _file_list, sha256: _file_sha256 });
     }
   };
   const handlerDeleteElement = async (fname, fidx) => {
-    const _key = [...files.keys].filter((k, idx) => k !== fidx);
-    const _list = [...files.list].filter((f) => f.name !== fname);
-    let sha256 = [];
-    setFiles({ keys: _key, list: _list });
+    const searchIndex = () => {
+      let filenames = [];
+      for (let i = 0; i < files.list.length; i++) {
+        filenames.push(files.list[i].name);
+      }
+      return filenames.indexOf(fname);
+    };
 
-    for (let i = 0; i < _list.length; i++) {
-      sha256.push(await getHash("SHA-256", new Blob([_list[i]])));
-    }
-    setSHA256(sha256);
+    const deleteIndex = searchIndex();
+    const _sha256 = [...files.sha256].filter((x, idx) => idx !== deleteIndex);
+    const _key = [...files.keys].filter((k, idx) => idx !== deleteIndex);
+    const _list = [...files.list].filter((f, idx) => idx !== deleteIndex);
+    setFiles({ keys: _key, list: _list, sha256: _sha256 });
   };
 
   return (
@@ -196,15 +198,15 @@ const FormAttachment = () => {
       <FilesContainer>
         <ToolBar>
           <span>Attached Files</span>
-          <button onClick={() => setFiles({ keys: [], list: [] })}>
+          <button onClick={() => setFiles({ keys: [], list: [], sha256: [] })}>
             clear
           </button>
         </ToolBar>
         {files.keys.map((_key, idx) => (
           <FileCard
             key={_key}
-            sha256={SHA256[idx]}
             file={files.list[idx]}
+            sha256={files.sha256[idx]}
             deleteElement={handlerDeleteElement}
             idx={_key}
           ></FileCard>

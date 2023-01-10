@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import FormContext from "../FormContext";
+import SidebarContext from "../Context/SidebarContext";
 import FormHeader from "./FormHeader";
 
 const BasicFormContainer = styled.div`
@@ -19,26 +20,29 @@ const BasicFormContainer = styled.div`
     width: 90%;
   }
 
-  input {
-    font-size: 0.7rem;
-    width: 100%;
-    text-align: center;
-  }
-
   th {
     text-align: left;
+  }
+  td {
+    width: 70%;
+    input,
+    select {
+      font-size: 0.7rem;
+      width: 100%;
+      text-align: center;
+
+      -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+      -moz-box-sizing: border-box; /* Firefox, other Gecko */
+      box-sizing: border-box; /* Opera/IE 8+ */
+    }
   }
 `;
 
 const FormBasicInfo = () => {
   const {
-    projectName,
     setProjectName,
     imageTitle,
     setImageTitle,
-    imageSubtitle,
-    setImageSubtitle,
-    releaseDate,
     setReleaseDate,
     NLRSignature,
     setNLRSignature,
@@ -47,6 +51,12 @@ const FormBasicInfo = () => {
     LRSignature,
     setLRSignature,
   } = useContext(FormContext);
+
+  const { projectlist } = useContext(SidebarContext);
+
+  useEffect(() => {
+    setProjectName(projectlist[0]);
+  }, [projectlist, setProjectName]);
   return (
     <BasicFormContainer>
       <FormHeader title="Basic Information"></FormHeader>
@@ -55,17 +65,17 @@ const FormBasicInfo = () => {
           <tr>
             <th>Project Name</th>
             <td>
-              <input
-                type="text"
-                id="project-name"
-                name="project-name"
-                defaultValue={projectName}
-                onKeyUp={(e) => setProjectName(e.currentTarget.value)}
-              ></input>
+              <select onChange={(e) => setProjectName(e.target.value)}>
+                {projectlist.map((name) => (
+                  <option value={name} key={`option-${name}}`}>
+                    {name}
+                  </option>
+                ))}
+              </select>
             </td>
           </tr>
           <tr>
-            <th>Image Title</th>
+            <th>Subject</th>
             <td>
               <input
                 type="text"
@@ -76,7 +86,7 @@ const FormBasicInfo = () => {
               ></input>
             </td>
           </tr>
-          <tr>
+          {/* <tr>
             <th>Image Subtitle</th>
             <td>
               <input
@@ -87,7 +97,7 @@ const FormBasicInfo = () => {
                 onKeyUp={(e) => setImageSubtitle(e.currentTarget.value)}
               ></input>
             </td>
-          </tr>
+          </tr> */}
           <tr>
             <th>Release date</th>
             <td>
